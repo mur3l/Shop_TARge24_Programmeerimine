@@ -1,7 +1,40 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<ShopTARge24.Models.Spaceships.SpaceshipIndexViewModel>
+
 @{
+	int rowNumber = 1;
 }
 
-asdasdasd
+<div>
+	<a asp-action="create" asp-controller="Spaceships" type="submit" class="btn btn-primary">Create</a>
+</div>
+
+<div class="h1">
+	Spaceships
+</div>
+<form method="post">
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th scope="col">Nr</th>
+				<th scope="col">Name</th>
+				<th scope="col">Type</th>
+				<th scope="col">Type</th>
+				<th scope="col">Built Date</th>
+				<th scope="col">Crew</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach(var spaceship in Model)
+				{
+					<tr>
+						<td>@rowNumber</td>
+						<td>@spaceship.Name</td>
+						<td>@spaceship.Classification</td>
+						<td>@spaceship.BuiltDate</td>
+						<td>@spaceship.Crew</td>
+					</tr>
+				rowNumber += 1;
+				}
+		</tbody>
+	</table>
+</form>
