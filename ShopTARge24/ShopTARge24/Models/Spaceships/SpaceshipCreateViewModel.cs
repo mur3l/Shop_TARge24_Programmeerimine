@@ -8,6 +8,7 @@
         public DateTime? BuiltDate { get; set; }
         public int? Crew { get; set; }
         public int? EnginePower { get; set; }
-
+        public DateTime? CreatedAt { get; internal set; }
+        public DateTime? ModifiedAt { get; internal set; }
     }
 }
