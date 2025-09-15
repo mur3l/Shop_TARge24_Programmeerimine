@@ -1,7 +1,6 @@
 using ShopTARge24.Data;
-
 using Microsoft.EntityFrameworkCore;
-using ShopTARge24.Core.Dto.Serviceinterface;
+using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.ApplicationServices.Services;
 
 var builder = WebApplication.CreateBuilder(args);
