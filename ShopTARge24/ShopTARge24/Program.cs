@@ -10,6 +10,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<ISpaceshipServices, SpaceshipServices>();
 
+builder.Services.AddDbContext<KindergartenContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddDbContext<ShopTARge24Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
