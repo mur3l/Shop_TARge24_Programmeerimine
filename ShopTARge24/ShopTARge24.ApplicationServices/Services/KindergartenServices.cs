@@ -1,62 +1,77 @@
-﻿using System.ComponentModel;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using ShopTARge24.Core.Domain;
+﻿using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShopTARge24.ApplicationServices.Services
 {
     public class KindergartenServices : IKindergartenServices
     {
-        private readonly KindergartenContext _context;
+        private readonly ShopTARge24Context _context;
 
-        public KindergartenServices
-            (
-                KindergartenContext context
-            )
+        public KindergartenServices(ShopTARge24Context context)
         {
             _context = context;
         }
+
         public async Task<Kindergarten> Create(KindergartenDto dto)
         {
-            Kindergarten kindergarten = new Kindergarten();
-            kindergarten.Id = Guid.NewGuid();
+            var kindergarten = new Kindergarten
+            {
+                Id = Guid.NewGuid(),
+                GroupName = dto.GroupName,
+                ChildrenCount = dto.ChildrenCount,
+                KindergartenName = dto.KindergartenName,
+                TeacherName = dto.TeacherName,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            await _context.Kindergarten.AddAsync(kindergarten);
+            await _context.SaveChangesAsync();
+
+            return kindergarten;
+        }
+
+        public async Task<Kindergarten> Update(KindergartenDto dto)
+        {
+            var kindergarten = await _context.Kindergarten.FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+            if (kindergarten == null)
+            {
+                return null;
+            }
+
             kindergarten.GroupName = dto.GroupName;
             kindergarten.ChildrenCount = dto.ChildrenCount;
             kindergarten.KindergartenName = dto.KindergartenName;
             kindergarten.TeacherName = dto.TeacherName;
-            await _context.Kindergarten.AddAsync(kindergarten);
+            kindergarten.UpdatedAt = DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
+
             return kindergarten;
         }
 
-        public Task<Spaceships> Create(SpaceshipDto dto)
+        public async Task<Kindergarten> Delete(Guid id)
         {
-            throw new NotImplementedException();
-        }
+            var kindergarten = await _context.Kindergarten.FirstOrDefaultAsync(x => x.Id == id);
 
-        public Task<Spaceships> Delete(Guid id)
-        {
-            throw new NotImplementedException();
+            if (kindergarten == null)
+            {
+                return null;
+            }
+
+            _context.Kindergarten.Remove(kindergarten);
+            await _context.SaveChangesAsync();
+
+            return kindergarten;
         }
 
         public async Task<Kindergarten> DetailAsync(Guid id)
         {
-            var result = await _context.Kindergarten.FirstOrDefaultAsync(x => x.Id == id);
-
-            return result;
-        }
-
-        public Task<Spaceships> Update(SpaceshipDto dto)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Spaceships> IKindergartenServices.DetailAsync(Guid id)
-        {
-            throw new NotImplementedException();
+            return await _context.Kindergarten.FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }
