@@ -11,5 +11,10 @@ namespace ShopTARge24.Data
             : base(options){}
 
         public DbSet<Spaceships> Spaceships { get; set; }
+<<<<<<< Updated upstream
+=======
+        public DbSet<Kindergarten> Kindergarten { get; set; }
+        public DbSet<FileToApi> FileToApis { get; set; }
+>>>>>>> Stashed changes
     }
 }
