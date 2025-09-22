@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Tracing;
+using Microsoft.AspNetCore.Http;
 
 namespace ShopTARge24.Core.Dto
 {
@@ -10,6 +11,7 @@ namespace ShopTARge24.Core.Dto
         public DateTime? BuiltDate { get; set; }
         public int? Crew { get; set; }
         public int? EnginePower { get; set; }
+        public List <IFormFile> Files { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
     }
