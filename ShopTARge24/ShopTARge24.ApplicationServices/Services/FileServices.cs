@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Hosting;
 using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
-using ShopTARge24.Core.Dto.Serviceinterface;
+using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Data;
+
 
 namespace ShopTARge24.ApplicationServices.Services
 {
@@ -10,14 +11,17 @@ namespace ShopTARge24.ApplicationServices.Services
     {
         private readonly IHostEnvironment _webHost;
         private readonly ShopTARge24Context _context;
+
         public FileServices
             (
                 IHostEnvironment webHost,
                 ShopTARge24Context context
             )
-        { 
+        {
             _webHost = webHost;
+            _context = context;
         }
+
         public void FilesToApi(SpaceshipDto dto, Spaceships domain)
         {
             if (dto.Files != null && dto.Files.Count > 0)
@@ -26,29 +30,28 @@ namespace ShopTARge24.ApplicationServices.Services
                 {
                     Directory.CreateDirectory(_webHost.ContentRootPath + "\\multipleFileUpload\\");
                 }
-            }
 
-            foreach (var file in dto.Files)
-            {
-                string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "multipleFileUpload");
-                string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                foreach (var file in dto.Files)
                 {
-                    file.CopyTo(fileStream);
+                    string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "multipleFileUpload");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                    FileToApi path = new FileToApi
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                        Id = Guid.NewGuid(),
-                        ExistingFilePath = uniqueFileName,
-                        SpaceshipId = domain.Id
-                    };
+                        file.CopyTo(fileStream);
 
-                    _context.FileToApis.AddAsync(path);
+                        FileToApi path = new FileToApi
+                        {
+                            Id = Guid.NewGuid(),
+                            ExistingFilePath = uniqueFileName,
+                            SpaceshipId = domain.Id
+                        };
+
+                        _context.FileToApis.AddAsync(path);
+                    }
                 }
             }
-
         }
     }
 }

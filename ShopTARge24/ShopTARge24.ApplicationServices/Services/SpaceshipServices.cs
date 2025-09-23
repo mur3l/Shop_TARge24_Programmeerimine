@@ -1,12 +1,9 @@
-﻿using System.ComponentModel;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Microsoft.Identity.Client;
+﻿using Microsoft.EntityFrameworkCore;
 using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
-using ShopTARge24.Core.Dto.Serviceinterface;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Data;
+
 
 namespace ShopTARge24.ApplicationServices.Services
 {
@@ -18,10 +15,10 @@ namespace ShopTARge24.ApplicationServices.Services
         public SpaceshipServices
             (
                 ShopTARge24Context context,
-            IFileServices fileServices
+                IFileServices fileServices
             )
         {
-             _context = context;
+            _context = context;
             _fileServices = fileServices;
         }
 
@@ -47,6 +44,7 @@ namespace ShopTARge24.ApplicationServices.Services
 
         public async Task<Spaceships> Update(SpaceshipDto dto)
         {
+            //vaja leida doamini objekt, mida saaks mappida dto-ga
             Spaceships spaceships = new Spaceships();
 
             spaceships.Id = dto.Id;
@@ -55,9 +53,11 @@ namespace ShopTARge24.ApplicationServices.Services
             spaceships.BuiltDate = dto.BuiltDate;
             spaceships.Crew = dto.Crew;
             spaceships.EnginePower = dto.EnginePower;
-            spaceships.CreatedAt = dto.ModifiedAt;
+            spaceships.CreatedAt = dto.CreatedAt;
             spaceships.ModifiedAt = DateTime.Now;
+            _fileServices.FilesToApi(dto, spaceships);
 
+            //tuleb db-s teha andmete uuendamine jauue oleku salvestamine
             _context.Spaceships.Update(spaceships);
             await _context.SaveChangesAsync();
 
@@ -71,11 +71,15 @@ namespace ShopTARge24.ApplicationServices.Services
 
             return result;
         }
+
         public async Task<Spaceships> Delete(Guid id)
         {
+            //leida ülesse konkreetne soovitud rida, mida soovite kustutada
             var result = await _context.Spaceships
                 .FirstOrDefaultAsync(x => x.Id == id);
 
+
+            //kui rida on leitud, siis eemaldage andmebaasist
             _context.Spaceships.Remove(result);
             await _context.SaveChangesAsync();
 
