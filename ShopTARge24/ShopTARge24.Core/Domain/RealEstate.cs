@@ -8,6 +8,5 @@ namespace ShopTARge24.Core.Domain
 {
     public class RealEstate
     {
-
     }
 }

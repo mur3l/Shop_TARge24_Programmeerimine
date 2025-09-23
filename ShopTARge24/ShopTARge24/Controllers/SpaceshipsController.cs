@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
@@ -63,11 +64,12 @@ namespace ShopTARge24.Controllers
                 ModifiedAt = vm.ModifiedAt,
                 Files = vm.Files,
                 FileToApiDtos = vm.Image
-                .Select(x => new FileToApiDto
-                { 
-                    Id = x.ImageId,
-                    ExistingFilePath = x.SpaceshipId
-                }).ToArray()
+                    .Select(x => new FileToApiDto
+                    {
+                        Id = x.ImageId,
+                        ExistingFilePath = x.Filepath,
+                        SpaceshipId = x.SpaceshipId
+                    }).ToArray()
             };
 
             var result = await _spaceshipServices.Create(dto);
@@ -116,7 +118,15 @@ namespace ShopTARge24.Controllers
                 Crew = vm.Crew,
                 EnginePower = vm.EnginePower,
                 CreatedAt = vm.CreatedAt,
-                ModifiedAt = vm.ModifiedAt
+                ModifiedAt = vm.ModifiedAt,
+                Files = vm.Files,
+                FileToApiDtos = vm.Image
+                    .Select(x => new FileToApiDto
+                    {
+                        Id = x.ImageId,
+                        ExistingFilePath = x.Filepath,
+                        SpaceshipId = x.SpaceshipId
+                    }).ToArray()
             };
 
             var result = await _spaceshipServices.Update(dto);
@@ -127,7 +137,6 @@ namespace ShopTARge24.Controllers
             }
 
             return RedirectToAction(nameof(Index));
-
         }
 
         [HttpGet]
@@ -178,6 +187,14 @@ namespace ShopTARge24.Controllers
                 return NotFound();
             }
 
+            var images = await _context.FileToApis
+                .Where(x => x.SpaceshipId == id)
+                .Select(x => new ImageViewModel
+                {
+                    Filepath = x.ExistingFilePath,
+                    ImageId = x.Id,
+                }).ToArrayAsync();
+
             var vm = new SpaceshipDetailsViewModel();
 
             vm.Id = spaceship.Id;
@@ -188,10 +205,9 @@ namespace ShopTARge24.Controllers
             vm.EnginePower = spaceship.EnginePower;
             vm.CreatedAt = spaceship.CreatedAt;
             vm.ModifiedAt = spaceship.ModifiedAt;
+            vm.Images.AddRange(images);
 
             return View(vm);
-
         }
-
     }
 }
