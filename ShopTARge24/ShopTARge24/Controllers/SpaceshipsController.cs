@@ -14,15 +14,18 @@ namespace ShopTARge24.Controllers
     {
         private readonly ShopTARge24Context _context;
         private readonly ISpaceshipServices _spaceshipServices;
+        private readonly IFileServices _fileServices;
 
         public SpaceshipsController
             (
                 ShopTARge24Context context,
-                ISpaceshipServices spaceshipServices
+                ISpaceshipServices spaceshipServices,
+                IFileServices fileServices
             )
         {
             _context = context;
             _spaceshipServices = spaceshipServices;
+            _fileServices = fileServices;
         }
 
 
@@ -220,5 +223,26 @@ namespace ShopTARge24.Controllers
 
             return View(vm);
         }
+
+        public async Task<IActionResult> RemoveImage(ImageViewModel vm)
+        {
+            //Tuleb ühendada dto ja vm (viewmodel), Id peab saama edastatud andmebaasi
+            var dto = new FileToApiDto()
+            {
+                Id = vm.ImageId
+            };
+
+            //Kutsu välja vastav serviceclass meetod
+            var image = await _fileServices.RemoveImageFromApi(dto);
+
+            //Kui on null siis vii Index vaatesse
+            if (image == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+        }
+
     }
-}
