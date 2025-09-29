@@ -62,7 +62,7 @@ namespace ShopTARge24.ApplicationServices.Services
                 .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
             //kus asuvad pildid mida hakatakse kustutama
-            var filePath = _webHost.ContentRootPath + "wwwroot\\multipleFileUpload\\"
+            var filePath = _webHost.ContentRootPath + "\\wwwroot\\"
                 + imageId.ExistingFilePath;
 
             if (File.Exists(filePath))
