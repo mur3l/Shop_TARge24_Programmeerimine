@@ -75,5 +75,19 @@ namespace ShopTARge24.ApplicationServices.Services
 
             return null;
         }
+
+        public async Task<List<FileToApi>> RemoveImagesFromApi(FileToApiDto[] dtos)
+        {
+            //Mitme pildi korraga kustutamine
+            foreach (var dto in dtos)
+            {
+                var imageId = await _context.FileToApis
+                    .FirstOrDefaultAsync(x => x.ExistingFilePath == dto.ExistingFilePath);
+                var filepath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
+                    + imageId 
+            }
+
+            return null;
+        }
     }
 }
