@@ -25,7 +25,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="multipleFileUpload\" />
+	  <Folder Include="wwwroot\multipleFileUpload\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\multipleFileUpload\6bf099a6-9c78-4c9e-84ea-11f67dae162d_Odyssey.jpg" />
+	  <None Include="wwwroot\multipleFileUpload\c49cab7b-bddd-44db-b265-7a708ea0976c_Odyssey3.jpg" />
+	  <None Include="wwwroot\multipleFileUpload\fa5a3417-5b34-4384-8dbc-1dc579ecb56f_Odyssey2.jpg" />
 	</ItemGroup>
 
 
