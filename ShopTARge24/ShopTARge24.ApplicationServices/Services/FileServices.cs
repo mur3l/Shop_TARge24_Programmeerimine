@@ -79,12 +79,21 @@ namespace ShopTARge24.ApplicationServices.Services
         public async Task<List<FileToApi>> RemoveImagesFromApi(FileToApiDto[] dtos)
         {
             //Mitme pildi korraga kustutamine
-            foreach (var dto in dtos)
+            foreach(var dto in dtos)
             {
                 var imageId = await _context.FileToApis
                     .FirstOrDefaultAsync(x => x.ExistingFilePath == dto.ExistingFilePath);
-                var filepath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
-                    + imageId 
+
+                var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
+                    + imageId.ExistingFilePath;
+
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+
+                _context.FileToApis.Remove(imageId);
+                await _context.SaveChangesAsync();
             }
 
             return null;
