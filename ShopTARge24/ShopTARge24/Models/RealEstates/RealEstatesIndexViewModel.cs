@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace ShopTARge24.Core.Dto
+namespace ShopTARge24.Models.RealEstates
 {
-    public class RealEstateDto
+    public class RealEstatesIndexViewModel
     {
         public Guid Id { get; set; }
         public double? Area { get; set; }
@@ -16,7 +11,6 @@ namespace ShopTARge24.Core.Dto
         public string? BuildingType { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
-        public List<IFormFile> Files { get; set; }
-        public FileToApiDto[] FileToApiDtos { get; set; }
     }
 }
+

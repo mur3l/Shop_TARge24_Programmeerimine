@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ShopTARge24.Models.RealEstates.RealEstatesIndexViewModel>
+
+@{
+    int rowNumber = 1;
+}
+
+<div>
+    <a asp-action="create" asp-controller="RealEstates" type="submit" class="btn btn-primary">Create</a>
+</div>
+
+<div class="h1">
+    RealEstates
+</div>
+<form method="get">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Area</th>
+                <th scope="col">Location</th>
+                <th scope="col">RoomNumber</th>
+                <th scope="col">BuildingType</th>
+                <th scope="col">CreatedAt</th>
+                <th scope="col">ModifiedAt</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var realestate in Model)
+            {
+                <tr>
+                    <td>@rowNumber</td>
+                    <td>@realestate.Id</td>
+                    <td>@realestate.Area</td>
+                    <td>@realestate.Location</td>
+                    <td>@realestate.RoomNumber</td>
+                    <td>@realestate.BuildingType</td>
+                    <td>@realestate.CreatedAt</td>
+                    <td>@realestate.ModifiedAt</td>
+                    <td class="d-flex gap-2">
+                        <a asp-action="details" asp-controller="RealEstates" asp-route-id="@realestate.Id" class="btn btn-info">Details</a>
+                        <a asp-action="update" asp-controller="RealEstates" asp-route-id="@realestate.Id" class="btn btn-primary">Update</a>
+                        <a asp-action="delete" asp-controller="RealEstates" asp-route-id="@realestate.Id" class="btn btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+                rowNumber += 1;
+            }
+        </tbody>
+    </table>
+</form>
