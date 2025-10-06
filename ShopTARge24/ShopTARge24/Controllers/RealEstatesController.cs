@@ -70,6 +70,14 @@ namespace ShopTARge24.Controllers
                 CreatedAt = vm.CreatedAt,
                 ModifiedAt = vm.ModifiedAt,
                 Files = vm.Files,
+                Image = vm.Images
+                    .Select(x => new FileToDatabaseDto
+                    {
+                        Id = x.ImageId,
+                        ImageData = x.ImageData,
+                        ImageTitle = x.ImageTitle,
+                        RealEstateId = x.RealEstateId,
+                    }).ToArray(),
                 FileToApiDtos = vm.Images
                     .Select(x => new FileToApiDto
                     {
@@ -78,6 +86,8 @@ namespace ShopTARge24.Controllers
                         SpaceshipId = x.SpaceshipId
                     }).ToArray()
             };
+
+            
 
             var result = await _realestateServices.Create(dto);
 

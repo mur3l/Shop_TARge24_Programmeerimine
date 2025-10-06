@@ -130,5 +130,31 @@ namespace ShopTARge24.ApplicationServices.Services
 
             return null;
         }
+
+        public void UploadFilesToDataBase(RealEstateDto dto, RealEstate domain)
+        {
+            //Toimub kontroll kas on vähemalt üks fail või mitu
+            if (dto.Files != null && dto.Files.Count > 0)
+            {
+
+                //Tuleb kasutada foreach, et mitu faili ülesse laadida
+                foreach (var file in dto.Files)
+                {
+                    //Foreachi sees tuleb kasutada using'ut
+                    using (var target = new MemoryStream())
+                    {
+                        FileToDatabase files = new FileToDatabase()
+                        {
+                            Id = Guid.NewGuid(),
+                            ImageTitle = file.FileName,
+                            RealEstateId = domain.Id
+                        };
+                    }
+
+                    //Andmed salvestada andmebaasi
+
+                }
+            }
+        }
     }
 }

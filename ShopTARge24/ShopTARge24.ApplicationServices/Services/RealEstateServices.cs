@@ -11,6 +11,7 @@ namespace ShopTARge24.ApplicationServices.Services
         private readonly ShopTARge24Context _context;
         private readonly IFileServices _fileServices;
 
+
         public RealEstateServices(ShopTARge24Context context, IFileServices fileServices)
         {
             _context = context;
@@ -34,6 +35,11 @@ namespace ShopTARge24.ApplicationServices.Services
 
             await _context.RealEstates.AddAsync(realEstate);
             await _context.SaveChangesAsync();
+
+            if (dto.Files != null)
+            {
+                _fileServices.UploadFilesToDatabase(dto, realEstate);
+            }
 
             return realEstate;
         }
