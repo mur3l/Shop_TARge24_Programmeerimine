@@ -56,6 +56,13 @@ else
             </div>
         </div>
 
+        <div>
+            @foreach (var images in Model.Images)
+            {
+                <partial name="_Images" model="images"/>    
+            }
+        </div>
+
         @if (Model.Images != null && Model.Images.Any())
         {
             foreach (var image in Model.Images)
