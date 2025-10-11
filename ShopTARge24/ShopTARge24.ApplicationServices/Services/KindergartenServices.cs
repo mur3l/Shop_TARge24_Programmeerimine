@@ -38,10 +38,12 @@ namespace ShopTARge24.ApplicationServices.Services
 
         public async Task<Kindergarten> Update(KindergartenDto dto)
         {
-            var entity = await _context.Kindergarten
+            var entity = await _context
+                .Kindergarten
                 .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
-            if (entity == null) return null;
+            if (entity == null)
+                return null;
 
             entity.GroupName = dto.GroupName?.Trim();
             entity.ChildrenCount = dto.ChildrenCount;
@@ -55,10 +57,12 @@ namespace ShopTARge24.ApplicationServices.Services
 
         public async Task<Kindergarten> Delete(Guid id)
         {
-            var entity = await _context.Kindergarten
+            var entity = await _context
+                .Kindergarten
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (entity == null) return null;
+            if (entity == null)
+                return null;
 
             var images = await _context.FileToApis
                 .Where(f => f.KindergartenId == id)
