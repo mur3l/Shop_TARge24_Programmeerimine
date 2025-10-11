@@ -2,6 +2,8 @@
 {
     public class ImageViewModel
     {
+        public Guid? RealEstateId { get; set; }
+
         public Guid ImageId { get; set; }
         public Guid Id { get; set; }
         public string? Filepath { get; set; }
