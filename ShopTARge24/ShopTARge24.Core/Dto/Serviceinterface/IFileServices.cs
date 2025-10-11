@@ -7,6 +7,7 @@ namespace ShopTARge24.Core.ServiceInterface
     {
         void FilesToApi(SpaceshipDto dto, Spaceships domain);
         void FilesToApi(RealEstateDto dto, RealEstate domain);
+        void FilesToApi(KindergartenDto dto, Kindergarten result);
         Task<FileToApi> RemoveImageFromApi(FileToApiDto dto);
         Task<List<FileToApi>> RemoveImagesFromApi(FileToApiDto[] dtos);
         void UploadFilesToDatabase(RealEstateDto dto, RealEstate realEstate);

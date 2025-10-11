@@ -51,6 +51,15 @@ else
             </div>
         </div>
 
+        <div class="form-group row">
+            <label asp-for="Files" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-5">
+                <div class="custom-file">
+                    <input asp-for="Files" multiple type="file" class="form-control" />
+                </div>
+            </div>
+        </div>
+
         @if (Model.Id.HasValue)
         {
             <input asp-action="update" asp-controller="kindergarten" type="submit" class="btn btn-success" value="Update" />
