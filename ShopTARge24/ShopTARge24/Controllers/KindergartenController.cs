@@ -12,14 +12,17 @@ namespace ShopTARge24.Controllers
     {
         private readonly ShopTARge24Context _context;
         private readonly IKindergartenServices _kindergartenServices;
-        private readonly IFileServices _fileServices;
+        private readonly IFileServices fileServices;
 
-        public KindergartenController(ShopTARge24Context context, IKindergartenServices kindergartenServices)
+        public KindergartenController(
+            ShopTARge24Context context, 
+            IKindergartenServices kindergartenServices,
+            IFileServices fileServices)
             
         {
             _context = context;
             _kindergartenServices = kindergartenServices;
-            _fileServices = _fileServices;
+            this.fileServices = fileServices;
         }
 
         public IActionResult Index()
@@ -59,10 +62,9 @@ namespace ShopTARge24.Controllers
             
             var result = await _kindergartenServices.Create(dto);
 
-            _fileServices.FilesToApi(dto, result);
-
-            await _fileServices.FilesToApi(dto, result);
+            await fileServices.FilesToApi(dto, result);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -87,7 +89,8 @@ namespace ShopTARge24.Controllers
                 GroupName = kindergarten.GroupName,
                 ChildrenCount = kindergarten.ChildrenCount,
                 KindergartenName = kindergarten.KindergartenName,
-                TeacherName = kindergarten.TeacherName
+                TeacherName = kindergarten.TeacherName,
+                Images = images
             };
 
             return View("CreateUpdate", vm);
@@ -129,7 +132,8 @@ namespace ShopTARge24.Controllers
                 Id = kindergarten.Id,
                 GroupName = kindergarten.GroupName,
                 KindergartenName = kindergarten.KindergartenName,
-                TeacherName = kindergarten.TeacherName
+                TeacherName = kindergarten.TeacherName,
+                Images = images
             };
 
             return View(vm);
@@ -167,7 +171,8 @@ namespace ShopTARge24.Controllers
                 GroupName = kindergarten.GroupName,
                 ChildrenCount = kindergarten.ChildrenCount,
                 KindergartenName = kindergarten.KindergartenName,
-                TeacherName = kindergarten.TeacherName
+                TeacherName = kindergarten.TeacherName,
+                Images = images
             };
 
             return View(vm);
