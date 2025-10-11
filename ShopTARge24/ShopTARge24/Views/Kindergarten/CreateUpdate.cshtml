@@ -9,9 +9,13 @@ else
     <h1>Create</h1>
 }
 
-
 <div>
-    <form method="post" enctype="multipart/form-data">
+    <form asp-action="@(Model.Id.HasValue ? "Update" : "Create")"
+          asp-controller="Kindergarten"
+          method="post"
+          enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
         <input asp-for="Id" type="hidden" />
         <input asp-for="CreatedAt" type="hidden" />
         <input asp-for="ModifiedAt" type="hidden" />
@@ -60,34 +64,41 @@ else
             </div>
         </div>
 
-        @if (Model.Id.HasValue)
-        {
-            <input asp-action="update" asp-controller="kindergarten" type="submit" class="btn btn-success" value="Update" />
-        }
-
-        else
-        {
-            <input asp-action="create" asp-controller="kindergarten" type="submit" class="btn btn-success" value="Create" />
-        }
-
-        @if (Model.Images != null && Model.Images.Any())
-        {
-            <div class="row mt-3">
-                @foreach (var image in Model.Images)
-                {
-                    <div class="col-md-3 mb-3">
-                        <img src="@image.Image" alt="@image.ImageTitle" class="img-thumbnail" />
-                        <p class="text-center">@image.ImageTitle</p>
-                    </div>
-                }
-            </div>
-        }
-        else
-        {
-            <p>No images available.</p>
-        }
-
-        <a asp-action="index" asp-controller="kindergarten" class="btn btn-success">Back</a>
-
+        <button type="submit" class="btn btn-success">
+            @(Model.Id.HasValue ? "Update" : "Create")
+        </button>
+        <a asp-action="Index" asp-controller="Kindergarten" class="btn btn-secondary">Back</a>
     </form>
+
+    @if (Model.Id.HasValue && Model.Images != null && Model.Images.Any())
+    {
+        <hr />
+        <div class="row mt-3">
+            @foreach (var image in Model.Images)
+            {
+                <div class="col-md-4 mb-4 text-center">
+                    <img src="@image.Image" alt="@image.ImageTitle" class="img-thumbnail" />
+
+                    <div class="small mt-1">@image.ImageTitle</div>
+
+                    <form asp-action="RemoveImage"
+                          asp-controller="Kindergarten"
+                          asp-route-imageId="@image.ImageId"
+                          asp-route-kindergartenId="@Model.Id"
+                          method="post"
+                          class="mt-2">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Delete this image?');">
+                            Delete image
+                        </button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No images available.</p>
+    }
 </div>

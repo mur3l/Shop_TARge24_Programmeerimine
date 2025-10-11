@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using ShopTARge24.Data;
+using ShopTARge24.ApplicationServices.Services;
 using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
+using ShopTARge24.Data;
 using ShopTARge24.Models.Kindergarten;
 using ShopTARge24.Models.Spaceships;
 
@@ -146,6 +147,16 @@ namespace ShopTARge24.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { id = dto.Id });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveImage(Guid imageId, Guid kindergartenId)
+        {
+            await fileServices.RemoveImageFromApi(new FileToApiDto { Id = imageId });
+
+            return RedirectToAction("Update","Kindergarten", new { id = kindergartenId });
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
