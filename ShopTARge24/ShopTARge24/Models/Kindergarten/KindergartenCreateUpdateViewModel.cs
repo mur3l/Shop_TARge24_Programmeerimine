@@ -17,6 +17,7 @@ namespace ShopTARge24.Models.Kindergarten
         public DateTime? ModifiedAt { get; internal set; }
 
         public IList<IFormFile>? Files { get; set; }
-        public List<ImageViewModel> Images { get; set; } = new();
+        public IEnumerable<ImageViewModel>? Images { get; set; }
+
     }
 }
