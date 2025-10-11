@@ -105,6 +105,42 @@ namespace ShopTARge24.ApplicationServices.Services
             }
         }
 
+        public async void FilesToApi(KindergartenDto dto, Kindergarten domain)
+        {
+            if (dto.Files != null && dto.Files.Count > 0)
+            {
+                string uploadDir = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
+
+                if (!Directory.Exists(uploadDir))
+                {
+                    Directory.CreateDirectory(uploadDir);
+                }
+
+                foreach (var file in dto.Files)
+                {
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                    string filePath = Path.Combine(uploadDir, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+
+                    FileToApi path = new FileToApi
+                    {
+                        Id = Guid.NewGuid(),
+                        ExistingFilePath = uniqueFileName, // only store filename
+                        KindergartenId = domain.Id
+                    };
+
+                    await _context.FileToApis.AddAsync(path);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
 
 
         public async Task<FileToApi> RemoveImageFromApi(FileToApiDto dto)

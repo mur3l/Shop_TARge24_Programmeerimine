@@ -3,6 +3,8 @@ using ShopTARge24.Data;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Models.Kindergarten;
+using Microsoft.EntityFrameworkCore;
+using ShopTARge24.Models.Spaceships;
 
 namespace ShopTARge24.Controllers
 {
@@ -10,11 +12,14 @@ namespace ShopTARge24.Controllers
     {
         private readonly ShopTARge24Context _context;
         private readonly IKindergartenServices _kindergartenServices;
+        private readonly IFileServices _fileServices;
 
         public KindergartenController(ShopTARge24Context context, IKindergartenServices kindergartenServices)
+            
         {
             _context = context;
             _kindergartenServices = kindergartenServices;
+            _fileServices = _fileServices;
         }
 
         public IActionResult Index()
@@ -44,14 +49,17 @@ namespace ShopTARge24.Controllers
         {
             var dto = new KindergartenDto
             {
-                Id = vm.Id,
+                Id = Guid.NewGuid(),
                 GroupName = vm.GroupName,
                 ChildrenCount = vm.ChildrenCount,
                 KindergartenName = vm.KindergartenName,
-                TeacherName = vm.TeacherName
+                TeacherName = vm.TeacherName,
+                Files = vm.Files
             };
+            
+            var result = await _kindergartenServices.Create(dto);
 
-            await _kindergartenServices.Create(dto);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -60,6 +68,15 @@ namespace ShopTARge24.Controllers
         {
             var kindergarten = await _kindergartenServices.DetailAsync(id);
             if (kindergarten == null) return NotFound();
+
+            var images = await _context.FileToApis
+                .Where(x => x.KindergartenId == kindergarten.Id)
+                .Select(y => new ImageViewModel
+                {
+                    Filepath = y.ExistingFilePath,
+                    ImageId = y.Id
+                })
+                .ToArrayAsync();
 
             var vm = new KindergartenCreateUpdateViewModel
             {
@@ -95,6 +112,15 @@ namespace ShopTARge24.Controllers
             var kindergarten = await _kindergartenServices.DetailAsync(id);
             if (kindergarten == null) return NotFound();
 
+            var images = await _context.FileToApis
+                .Where(x => x.KindergartenId == id)
+                .Select(y => new ImageViewModel
+                {
+                    Filepath = y.ExistingFilePath,
+                    ImageId = y.Id
+                })
+                .ToArrayAsync();
+
             var vm = new KindergartenDeleteViewModel
             {
                 Id = kindergarten.Id,
@@ -118,6 +144,19 @@ namespace ShopTARge24.Controllers
         {
             var kindergarten = await _kindergartenServices.DetailAsync(id);
             if (kindergarten == null) return NotFound();
+
+            var images = await _context.FileToApis
+                .Where(x => x.KindergartenId == kindergarten.Id)
+                .Select(y => new ImageViewModel
+                {
+                    Filepath = y.ExistingFilePath,
+                    ImageId = y.Id,
+                    KindergartenId = y.KindergartenId,
+                    ImageData = y.ImageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
+                })
+                .ToArrayAsync();
 
             var vm = new KindergartenDetailsViewModel
             {
