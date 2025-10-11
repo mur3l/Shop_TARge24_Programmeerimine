@@ -1,8 +1,11 @@
-﻿using ShopTARge24.Core.Domain;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace ShopTARge24.ApplicationServices.Services
 {
@@ -17,61 +20,64 @@ namespace ShopTARge24.ApplicationServices.Services
 
         public async Task<Kindergarten> Create(KindergartenDto dto)
         {
-            var kindergarten = new Kindergarten
+            var entity = new Kindergarten
             {
-                Id = Guid.NewGuid(),
-                GroupName = dto.GroupName,
+                Id = dto.Id == Guid.Empty ? Guid.NewGuid() : dto.Id,
+                GroupName = dto.GroupName?.Trim(),
                 ChildrenCount = dto.ChildrenCount,
-                KindergartenName = dto.KindergartenName,
-                TeacherName = dto.TeacherName,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                KindergartenName = dto.KindergartenName?.Trim(),
+                TeacherName = dto.TeacherName?.Trim(),
+                CreatedAt        = DateTime.UtcNow,
+                UpdatedAt        = DateTime.UtcNow
             };
 
-            await _context.Kindergarten.AddAsync(kindergarten);
+            await _context.Kindergarten.AddAsync(entity);
             await _context.SaveChangesAsync();
-
-            return kindergarten;
+            return entity;
         }
 
         public async Task<Kindergarten> Update(KindergartenDto dto)
         {
-            var kindergarten = await _context.Kindergarten.FirstOrDefaultAsync(x => x.Id == dto.Id);
+            var entity = await _context.Kindergarten
+                .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
-            if (kindergarten == null)
-            {
-                return null;
-            }
+            if (entity == null) return null;
 
-            kindergarten.GroupName = dto.GroupName;
-            kindergarten.ChildrenCount = dto.ChildrenCount;
-            kindergarten.KindergartenName = dto.KindergartenName;
-            kindergarten.TeacherName = dto.TeacherName;
-            kindergarten.UpdatedAt = DateTime.UtcNow;
+            entity.GroupName = dto.GroupName?.Trim();
+            entity.ChildrenCount = dto.ChildrenCount;
+            entity.KindergartenName = dto.KindergartenName?.Trim();
+            entity.TeacherName = dto.TeacherName?.Trim();
+            entity.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
-
-            return kindergarten;
+            return entity;
         }
 
         public async Task<Kindergarten> Delete(Guid id)
         {
-            var kindergarten = await _context.Kindergarten.FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _context.Kindergarten
+                .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (kindergarten == null)
+            if (entity == null) return null;
+
+            var images = await _context.FileToApis
+                .Where(f => f.KindergartenId == id)
+                .ToListAsync();
+
+            if (images.Count > 0)
             {
-                return null;
+                _context.FileToApis.RemoveRange(images);
             }
 
-            _context.Kindergarten.Remove(kindergarten);
+            _context.Kindergarten.Remove(entity);
             await _context.SaveChangesAsync();
-
-            return kindergarten;
+            return entity;
         }
 
         public async Task<Kindergarten> DetailAsync(Guid id)
         {
-            return await _context.Kindergarten.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Kindergarten
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }
