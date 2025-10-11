@@ -27,64 +27,84 @@ namespace ShopTARge24.ApplicationServices.Services
         {
             if (dto.Files != null && dto.Files.Count > 0)
             {
-                if (!Directory.Exists(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"))
+                string uploadDir = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
+                if (!Directory.Exists(uploadDir))
                 {
-                    Directory.CreateDirectory(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\");
+                    Directory.CreateDirectory(uploadDir);
                 }
 
                 foreach (var file in dto.Files)
                 {
-                    string uploadsFolder = Path.Combine(_webHost.ContentRootPath,"wwwroot", "multipleFileUpload");
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    string filePath = Path.Combine(uploadDir, uniqueFileName);
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
+                    }
+
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        file.CopyTo(memoryStream);
 
                         FileToApi path = new FileToApi
                         {
                             Id = Guid.NewGuid(),
-                            ExistingFilePath = uniqueFileName,
-                            SpaceshipId = domain.Id
+                            ExistingFilePath = Path.Combine("multipleFileUpload", uniqueFileName),
+                            SpaceshipId = domain.Id,
+                            ImageTitle = file.FileName,
+                            ImageData = memoryStream.ToArray()
                         };
 
-                        _context.FileToApis.AddAsync(path);
+                        _context.FileToApis.Add(path);
                     }
                 }
+
+                _context.SaveChanges();
             }
         }
+
         public void FilesToApi(RealEstateDto dto, RealEstate domain)
         {
             if (dto.Files != null && dto.Files.Count > 0)
             {
-                if (!Directory.Exists(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"))
+                string uploadDir = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
+                if (!Directory.Exists(uploadDir))
                 {
-                    Directory.CreateDirectory(_webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\");
+                    Directory.CreateDirectory(uploadDir);
                 }
 
                 foreach (var file in dto.Files)
                 {
-                    string uploadsFolder = Path.Combine(_webHost.ContentRootPath, "wwwroot", "multipleFileUpload");
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    string filePath = Path.Combine(uploadDir, uniqueFileName);
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
+                    }
+
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        file.CopyTo(memoryStream);
 
                         FileToApi path = new FileToApi
                         {
                             Id = Guid.NewGuid(),
-                            ExistingFilePath = uniqueFileName,
-                            RealEstateId = domain.Id // ✅ notice this, not SpaceshipId
+                            ExistingFilePath = Path.Combine("multipleFileUpload", uniqueFileName),
+                            RealEstateId = domain.Id,
+                            ImageTitle = file.FileName,
+                            ImageData = memoryStream.ToArray()
                         };
 
-                        _context.FileToApis.AddAsync(path);
+                        _context.FileToApis.Add(path);
                     }
                 }
+
+                _context.SaveChanges();
             }
         }
+
 
 
         public async Task<FileToApi> RemoveImageFromApi(FileToApiDto dto)
@@ -154,6 +174,32 @@ namespace ShopTARge24.ApplicationServices.Services
                     //Andmed salvestada andmebaasi
 
                 }
+            }
+        }
+
+        public void UploadFilesToDatabase(RealEstateDto dto, RealEstate realEstate)
+        {
+            if (dto.Files != null && dto.Files.Count > 0)
+            {
+                foreach (var file in dto.Files)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        file.CopyTo(memoryStream);
+
+                        FileToApi image = new FileToApi
+                        {
+                            Id = Guid.NewGuid(),
+                            RealEstateId = realEstate.Id,
+                            ImageTitle = file.FileName,
+                            ImageData = memoryStream.ToArray()
+                        };
+
+                        _context.FileToApis.Add(image);
+                    }
+                }
+
+                _context.SaveChanges();
             }
         }
     }

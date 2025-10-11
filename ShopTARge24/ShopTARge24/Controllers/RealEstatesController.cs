@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Buffers.Text;
+using System.Xml;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
@@ -114,7 +115,11 @@ namespace ShopTARge24.Controllers
                 .Select(y => new ImageViewModel
                 {
                     Filepath = y.ExistingFilePath,
-                    ImageId = y.Id
+                    ImageId = y.Id,
+                    RealEstateId = y.RealEstateId,
+                    ImageData = y.ImageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
                 }).ToArrayAsync();
 
             var vm = new RealEstateCreateUpdateViewModel();
@@ -179,7 +184,11 @@ namespace ShopTARge24.Controllers
                 .Select(y => new ImageViewModel
                 {
                     Filepath = y.ExistingFilePath,
-                    ImageId = y.Id
+                    ImageId = y.Id,
+                    RealEstateId = y.RealEstateId,
+                    ImageData = y.ImageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
                 }).ToArrayAsync();
 
             var vm = new RealEstateDeleteViewModel();
@@ -221,10 +230,14 @@ namespace ShopTARge24.Controllers
 
             var images = await _context.FileToApis
                 .Where(x => x.RealEstateId == id)
-                .Select(x => new ImageViewModel
+                .Select(y => new ImageViewModel
                 {
-                    Filepath = x.ExistingFilePath,
-                    ImageId = x.Id,
+                    Filepath = y.ExistingFilePath,
+                    Id = y.Id,
+                    RealEstateId = y.RealEstateId,
+                    ImageData = y.ImageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
                 }).ToArrayAsync();
 
             var vm = new RealEstateDetailsViewModel();
