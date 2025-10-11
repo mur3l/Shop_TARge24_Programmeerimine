@@ -50,6 +50,14 @@
 	<hr />
 
 	<hr />
+
+	@if (Model.Images != null && Model.Images.Any())
+	{
+		@foreach (var image in Model.Images)
+		{
+			<partial name="_Images" model="image" />
+		}
+	}
 	<a asp-action="Index" asp-controller="kindergarten" class="btn btn-danger">Back</a>
 
 </div>

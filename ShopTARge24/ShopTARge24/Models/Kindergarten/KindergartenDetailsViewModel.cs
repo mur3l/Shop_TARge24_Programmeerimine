@@ -1,4 +1,9 @@
-﻿namespace ShopTARge24.Models.Kindergarten
+﻿using Microsoft.AspNetCore.Http;
+using ShopTARge24.Models.Spaceships;
+using System;
+using System.Collections.Generic;
+
+namespace ShopTARge24.Models.Kindergarten
 {
     public class KindergartenDetailsViewModel
     {
@@ -11,5 +16,8 @@
 
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
+
+        public IList<IFormFile>? Files { get; set; }
+        public List<ImageViewModel> Images { get; set; } = new();
     }
 }

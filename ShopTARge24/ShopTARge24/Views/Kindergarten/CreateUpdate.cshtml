@@ -61,6 +61,14 @@ else
             <input asp-action="create" asp-controller="kindergarten" type="submit" class="btn btn-success" value="Create" />
         }
 
+        @if (Model.Images != null && Model.Images.Any())
+        {
+            @foreach (var image in Model.Images)
+            {
+                <partial name="_Images" model="image" />
+            }
+        }
+
         <a asp-action="index" asp-controller="kindergarten" class="btn btn-success">Back</a>
 
     </form>
