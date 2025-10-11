@@ -61,6 +61,7 @@ namespace ShopTARge24.Controllers
 
             _fileServices.FilesToApi(dto, result);
 
+            await _fileServices.FilesToApi(dto, result);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
