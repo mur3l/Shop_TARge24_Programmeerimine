@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using ShopTARge24.Data;
+using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Models.Kindergarten;
-using Microsoft.EntityFrameworkCore;
 using ShopTARge24.Models.Spaceships;
 
 namespace ShopTARge24.Controllers
@@ -15,10 +17,9 @@ namespace ShopTARge24.Controllers
         private readonly IFileServices fileServices;
 
         public KindergartenController(
-            ShopTARge24Context context, 
+            ShopTARge24Context context,
             IKindergartenServices kindergartenServices,
             IFileServices fileServices)
-            
         {
             _context = context;
             _kindergartenServices = kindergartenServices;
@@ -48,8 +49,14 @@ namespace ShopTARge24.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(KindergartenCreateUpdateViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("CreateUpdate", vm);
+            }
+
             var dto = new KindergartenDto
             {
                 Id = Guid.NewGuid(),
@@ -59,13 +66,13 @@ namespace ShopTARge24.Controllers
                 TeacherName = vm.TeacherName,
                 Files = vm.Files
             };
-            
-            var result = await _kindergartenServices.Create(dto);
 
-            await fileServices.FilesToApi(dto, result);
+            var created = await _kindergartenServices.Create(dto);
+
+            await fileServices.FilesToApi(dto, created ?? new Kindergarten { Id = dto.Id });
+
             await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), new { id = dto.Id });
         }
 
         [HttpGet]
@@ -79,9 +86,13 @@ namespace ShopTARge24.Controllers
                 .Select(y => new ImageViewModel
                 {
                     Filepath = y.ExistingFilePath,
-                    ImageId = y.Id
+                    ImageId = y.Id,
+                    KindergartenId = y.KindergartenId,
+                    ImageTitle = y.ImageTitle,
+                    ImageData = y.ImageData,
+                    Image = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
                 })
-                .ToArrayAsync();
+                .ToListAsync();
 
             var vm = new KindergartenCreateUpdateViewModel
             {
@@ -97,19 +108,43 @@ namespace ShopTARge24.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(KindergartenCreateUpdateViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                vm.Images = await _context.FileToApis
+                    .Where(x => x.KindergartenId == vm.Id)
+                    .Select(y => new ImageViewModel
+                    {
+                        Filepath = y.ExistingFilePath,
+                        ImageId = y.Id,
+                        KindergartenId = y.KindergartenId,
+                        ImageTitle = y.ImageTitle,
+                        ImageData = y.ImageData,
+                        Image = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
+                    })
+                    .ToListAsync();
+
+                return View("CreateUpdate", vm);
+            }
+
             var dto = new KindergartenDto
             {
                 Id = vm.Id,
                 GroupName = vm.GroupName,
                 ChildrenCount = vm.ChildrenCount,
                 KindergartenName = vm.KindergartenName,
-                TeacherName = vm.TeacherName
+                TeacherName = vm.TeacherName,
+                Files = vm.Files
             };
 
-            await _kindergartenServices.Update(dto);
-            return RedirectToAction(nameof(Index));
+            var updated = await _kindergartenServices.Update(dto);
+
+            await fileServices.FilesToApi(dto, updated ?? new Kindergarten { Id = dto.Id });
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), new { id = dto.Id });
         }
 
         [HttpGet]
@@ -123,9 +158,13 @@ namespace ShopTARge24.Controllers
                 .Select(y => new ImageViewModel
                 {
                     Filepath = y.ExistingFilePath,
-                    ImageId = y.Id
+                    ImageId = y.Id,
+                    KindergartenId = y.KindergartenId,
+                    ImageTitle = y.ImageTitle,
+                    ImageData = y.ImageData,
+                    Image = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
                 })
-                .ToArrayAsync();
+                .ToListAsync();
 
             var vm = new KindergartenDeleteViewModel
             {
@@ -140,6 +179,7 @@ namespace ShopTARge24.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmation(Guid id)
         {
             await _kindergartenServices.Delete(id);
@@ -163,7 +203,7 @@ namespace ShopTARge24.Controllers
                     ImageTitle = y.ImageTitle,
                     Image = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(y.ImageData))
                 })
-                .ToArrayAsync();
+                .ToListAsync();
 
             var vm = new KindergartenDetailsViewModel
             {

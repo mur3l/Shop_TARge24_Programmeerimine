@@ -56,9 +56,16 @@
 		<div class="row mt-3">
 			@foreach (var image in Model.Images)
 			{
-				<partial name="_Images" model="image" />
+				<div class="col-md-3 mb-3">
+					<img src="@image.Image" alt="@image.ImageTitle" class="img-thumbnail" />
+					<p class="text-center">@image.ImageTitle</p>
+				</div>
 			}
 		</div>
+	}
+	else
+	{
+		<p>No images available.</p>
 	}
 	<a asp-action="Index" asp-controller="kindergarten" class="btn btn-danger">Back</a>
 
