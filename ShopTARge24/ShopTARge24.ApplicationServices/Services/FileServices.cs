@@ -179,18 +179,18 @@ namespace ShopTARge24.ApplicationServices.Services
             //Mitme pildi korraga kustutamine
             foreach(var dto in dtos)
             {
-                var imageId = await _context.FileToApis
-                    .FirstOrDefaultAsync(x => x.ExistingFilePath == dto.ExistingFilePath);
+                var image = await _context.FileToApis
+                    .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
                 var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpload\\"
-                    + imageId.ExistingFilePath;
+                    + image.ExistingFilePath;
 
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);
                 }
 
-                _context.FileToApis.Remove(imageId);
+                _context.FileToApis.Remove(image);
                 await _context.SaveChangesAsync();
             }
 
