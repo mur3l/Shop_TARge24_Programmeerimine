@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using ShopTARge24.ApplicationServices.Services;
+using ShopTARge24.Core.Dto.Serviceinterface;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Data;
 
@@ -13,6 +14,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ISpaceshipServices, SpaceshipServices>();
 builder.Services.AddScoped<IFileServices, FileServices>();
 builder.Services.AddScoped<IRealEstateServices, RealEstateServices>();
+builder.Services.AddScoped<IWeatherForecastServices, WeatherForecastServices>();
 
 
 builder.Services.AddDbContext<KindergartenContext>(options =>
