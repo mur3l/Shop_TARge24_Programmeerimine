@@ -1,0 +1,37 @@
+﻿@model ShopTARge24.Models.CockTails.CockTailsViewModel
+
+<!--Search-->
+<form method="get" asp-controller="CockTails" asp-action="Index" class="mb-4">
+    <div class="input-group">
+        <input type="text"
+               name="searchTerm"
+               class="form-control"
+               placeholder="Search cocktails..."
+               value="@ViewBag.SearchTerm" />
+        <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+</form>
+
+<div class="row">
+    @if (Model?.drinks != null && Model.drinks.Any())
+    {
+        foreach (var drink in Model.drinks)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <img src="@drink.strDrinkThumb" class="card-img-top" alt="@drink.strDrink" />
+                    <div class="card-body">
+                        <h5 class="card-title">@drink.strDrink</h5>
+                        <p><strong>Category:</strong> @drink.strCategory</p>
+                        <p><strong>Glass:</strong> @drink.strGlass</p>
+                        <p>@drink.strInstructions</p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No cocktails found for "@ViewBag.SearchTerm".</p>
+    }
+</div>
