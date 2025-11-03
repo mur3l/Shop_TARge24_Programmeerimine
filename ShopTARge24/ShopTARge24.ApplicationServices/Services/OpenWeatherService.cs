@@ -14,7 +14,7 @@ namespace ShopTARge24.ApplicationServices.Services
         {
             using (var httpClient = new HttpClient())
             {
-                var url = $"{ baseUrl}?q{ city}&appid ={ apiKey}&units=Metric";
+                var url = $"{baseUrl}?q={city}&appid={apiKey}&units=Metric";
                 var response = await httpClient.GetStringAsync(url);
 
                 JObject json = JObject.Parse(response);

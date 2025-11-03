@@ -6,8 +6,11 @@
 
 <form method="get" asp-action="Index">
 	<label for="city">Enter city:</label>
-	<input type="text" id="city" name="city" value="@ViewData["City"]/>
+	<input type="text" id="city" name="city" value="" placeholder="Type a city..."/>
 	<button type="submit">Show Weather Info</button>
 </form>
 
-<p>@ViewData["WeatherData"]</p>
+@if (ViewData["WeatherData"] != null)
+{
+	<p>@ViewData["WeatherData"]</p>
+}

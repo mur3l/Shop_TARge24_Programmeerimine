@@ -15,6 +15,7 @@ namespace ShopTARge24.Controllers
 
         //Url päring
         [HttpGet("/OpenWeather")]
+        //Hoiab mälus Tallinnat kuniks kasutaja linna otsib
         public async Task<IActionResult> Index(string city = "Tallinn")
         {
             var weatherData = await _openweatherService.GetWeatherAsync(city);
