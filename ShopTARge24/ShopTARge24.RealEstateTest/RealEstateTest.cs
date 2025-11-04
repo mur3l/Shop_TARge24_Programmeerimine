@@ -8,7 +8,7 @@ namespace ShopTARge24.RealEstateTest
     public class RealEstateTest : TestBase
     {
         [Fact]
-        public async Task Test1()
+        public async Task ShouldNot_AddEmtpyRealEstate_WhenReturnResult()
         {
             //Arrange
             RealEstateDto dto = new()

@@ -4,6 +4,8 @@ using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.ApplicationServices.Services;
 using ShopTARge24.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using ShopTARge24.RealEstateTest.Mock;
 
 namespace ShopTARge24.RealEstateTest;
 
@@ -21,6 +23,7 @@ public abstract class TestBase
     {
         services.AddScoped<IRealEstateServices, RealEstateServices>();
         services.AddScoped<IFileServices, FileServices>();
+        services.AddScoped<IHostEnvironment, MockIHostEnvironment>();
 
         services.AddDbContext<ShopTARge24Context>(x =>
         {
