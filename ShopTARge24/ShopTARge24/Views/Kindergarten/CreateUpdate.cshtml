@@ -16,42 +16,44 @@ else
           enctype="multipart/form-data">
         @Html.AntiForgeryToken()
 
-        <input asp-for="Id" type="hidden" />
-        <input asp-for="CreatedAt" type="hidden" />
-        <input asp-for="ModifiedAt" type="hidden" />
+        <input asp-for="Id" type="hidden" id="kinder-id"/>
+        <input asp-for="CreatedAt" type="hidden" id="kinder-created"/>
+        <input asp-for="ModifiedAt" type="hidden" id="kinder-modified"/>
 
         <div class="form-group row">
             <label asp-for="Nr" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="Nr" class="form-control" />
+                <input asp-for="Nr" class="form-control" id="kinder-nr"/>
             </div>
         </div>
 
         <div class="form-group row">
             <label asp-for="GroupName" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="GroupName" class="form-control" />
+                <input asp-for="GroupName" class="form-control" id="kinder-groupname"/>
             </div>
         </div>
 
         <div class="form-group row">
             <label asp-for="ChildrenCount" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="ChildrenCount" class="form-control" />
+                <input asp-for="ChildrenCount" class="form-control" id="kinder-childcount"/>
+                @*CRUD TESTI JAOKS*@
+                <span asp-validation-for="ChildrenCount" class="text-danger"></span>
             </div>
         </div>
 
         <div class="form-group row">
             <label asp-for="KindergartenName" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="KindergartenName" class="form-control" />
+                <input asp-for="KindergartenName" class="form-control" id="kinder-name"/>
             </div>
         </div>
 
         <div class="form-group row">
             <label asp-for="TeacherName" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="TeacherName" class="form-control" />
+                <input asp-for="TeacherName" class="form-control" id="kinder-teacher"/>
             </div>
         </div>
 
@@ -59,15 +61,15 @@ else
             <label asp-for="Files" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-5">
                 <div class="custom-file">
-                    <input asp-for="Files" multiple type="file" class="form-control" />
+                    <input asp-for="Files" multiple type="file" class="form-control" id="kinder-files"/>
                 </div>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-success">
+        <button type="submit" class="btn btn-success" id="kinder-submit">
             @(Model.Id.HasValue ? "Update" : "Create")
         </button>
-        <a asp-action="Index" asp-controller="Kindergarten" class="btn btn-secondary">Back</a>
+        <a asp-action="Index" asp-controller="Kindergarten" class="btn btn-secondary" id="kinder-back">Back</a>
     </form>
 
     @if (Model.Id.HasValue && Model.Images != null && Model.Images.Any())

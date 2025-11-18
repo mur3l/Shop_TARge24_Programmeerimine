@@ -27,8 +27,8 @@ namespace ShopTARge24.ApplicationServices.Services
                 Location = dto.Location,
                 RoomNumber = dto.RoomNumber,
                 BuildingType = dto.BuildingType,
-                CreatedAt = DateTime.Now,
-                ModifiedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
             };
 
             _fileServices.FilesToApi(dto, realEstate);
@@ -53,12 +53,18 @@ namespace ShopTARge24.ApplicationServices.Services
             realEstate.Location = dto.Location;
             realEstate.RoomNumber = dto.RoomNumber;
             realEstate.BuildingType = dto.BuildingType;
-            realEstate.ModifiedAt = DateTime.Now;
+            realEstate.ModifiedAt = DateTime.UtcNow;
 
             _fileServices.FilesToApi(dto, realEstate);
 
             _context.RealEstates.Update(realEstate);
+            _context.Entry(realEstate).Property(r => r.ModifiedAt).IsModified = true;
+
             await _context.SaveChangesAsync();
+
+            var updated = await _context.RealEstates
+            .AsNoTracking()
+            .FirstAsync(x => x.Id == realEstate.Id);
 
             return realEstate;
         }
