@@ -526,49 +526,6 @@ namespace ShopTARge24.RealEstateTest
                 ModifiedAt = DateTime.Now.AddYears(1)
             };
 
-            [Fact]
-            public async Task Should_DeleteRelateImage_WhendDeleteRealEstate()
-            {
-                //Arrange
-                var dto = new RealEstateDto
-                {
-                    Area = 55.0,
-                    Location = "Tallinn",
-                    RoomNumber = 2,
-                    BuildingType = "Apartment",
-                    CreatedAt = DateTime.UtcNow,
-                    ModifiedAt = DateTime.UtcNow
-                };
-
-                var created = await Svc<IRealEstateServices>().Create(dto);
-                var id = (Guid)created.Id;
-
-                var db = Svc<ShopTARge24Context>();
-                db.FileToDatabase.Add(new FileToDatabase)
-                    {
-                        Id = Guid.NewGuid(),
-                        RealEstateId = id,
-                        ImageTitle = "testImage.jpg",
-                        ImageData = new byte[] { 0x20, 0x20, 0x20 }
-                    });
-                db.FileToDatabase.Add(new FileToDatabase
-                    {
-                        Id = Guid.NewGuid(),
-                        RealEstateId = id,
-                        ImageTitle = "testImage2.jpg",
-                        ImageData = new byte[] { 0x30, 0x30, 0x30 }
-                    });
-                await db.SaveChangesAsync();
-
-                //Act
-                await Svc<IRealEstateServices>().Delete(id);
-
-                //Assert
-                var leftovers = db.FileToDatabase.Where(x => x.RealEstateId == id).ToList();
-
-                Assert.NotEmpty(leftovers);
-            }
-
             return realEstate;
         }
     }

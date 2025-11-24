@@ -20,6 +20,9 @@ namespace ShopTARge24.ApplicationServices.Services
 
         public async Task<Kindergarten> Create(KindergartenDto dto)
         {
+            //Kontrolli ChildrenCount "Ingvar Testi jaoks"
+            Validate(dto);
+
             var entity = new Kindergarten
             {
                 Id = dto.Id == Guid.Empty ? Guid.NewGuid() : dto.Id,
@@ -38,6 +41,9 @@ namespace ShopTARge24.ApplicationServices.Services
 
         public async Task<Kindergarten> Update(KindergartenDto dto)
         {
+            //Kontrolli ChildrenCount "Ingvar Testi jaoks"
+            Validate(dto);
+
             var entity = await _context
                 .Kindergarten
                 .FirstOrDefaultAsync(x => x.Id == dto.Id);
@@ -82,6 +88,25 @@ namespace ShopTARge24.ApplicationServices.Services
         {
             return await _context.Kindergarten
                 .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        //Kontrolli meetod
+        public void Validate(KindergartenDto dto)
+        {
+            if (dto == null)
+                throw new ArgumentException("Palun sisesta andmed.");
+
+            if (string.IsNullOrWhiteSpace(dto.GroupName))
+                throw new ArgumentException("Groupname on kohustuslik.");
+
+            if(string.IsNullOrWhiteSpace(dto.KindergartenName))
+                throw new ArgumentException("KindergartenName on kohustuslik.");
+
+            if(string.IsNullOrWhiteSpace(dto.TeacherName))
+                throw new ArgumentException("TeacherName on kohustuslik.");
+
+            if (dto.ChildrenCount <= 0)
+                throw new ArgumentException("ChildrenCount peab olema suurem kui null.");
         }
     }
 }
