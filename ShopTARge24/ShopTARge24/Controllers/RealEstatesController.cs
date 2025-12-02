@@ -251,6 +251,7 @@ namespace ShopTARge24.Controllers
             vm.Image.AddRange(images);
 
             return View(vm);
+
         }
 
         public async Task<IActionResult> RemoveImage(ImageViewModel vm)
@@ -272,6 +273,8 @@ namespace ShopTARge24.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
     }
 
 }
