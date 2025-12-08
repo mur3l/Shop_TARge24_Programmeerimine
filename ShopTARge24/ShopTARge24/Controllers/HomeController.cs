@@ -17,6 +17,10 @@ namespace ShopTARge24.Controllers
         {
             return View();
         }
+        public IActionResult ChatCounter()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {
