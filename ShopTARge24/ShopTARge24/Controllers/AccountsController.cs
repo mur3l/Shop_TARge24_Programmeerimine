@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,10 +28,59 @@ namespace ShopTARge24.Controllers
             _emailServices = emailServices;
         }
 
+        // CHANGE PASSWORD
+        [Authorize]
+        [HttpGet]
+        public IActionResult ChangePasswordViewModel()
+        {
+            return View();
+        }
+
+        // CHANGE PASSWORD
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePasswordViewModel(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(
+                user,
+                model.CurrentPassword,
+                model.NewPassword
+            );
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return View(model);
+            }
+
+            //REFRESH COOKIES
+            await _signInManager.RefreshSignInAsync(user);
+            TempData["Success"] = "Password changed successfully.";
+
+            return RedirectToAction("Index", "Home");
+        }
+
         // REGISTER
 
         [HttpGet]
         public IActionResult Register()
+
         {
             return View();
         }
@@ -130,29 +180,48 @@ namespace ShopTARge24.Controllers
 
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+            if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return View(model);
             }
 
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+            {
+                ModelState.AddModelError(string.Empty, "Please confirm your email first.");
+                return View(model);
+            }
+
+            //ACCOUNT LOCKED CHECK
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                ModelState.AddModelError(string.Empty,
+                    "Your account is locked due to multiple failed login attempts. Please try again later.");
+                return View(model);
+            }
+
             var result = await _signInManager.PasswordSignInAsync(
-                model.Email,
+                user,
                 model.Password,
                 model.RememberMe,
-                lockoutOnFailure: false);
+                lockoutOnFailure: true);
+
+            if (result.IsLockedOut)
+            {
+                ModelState.AddModelError(string.Empty,
+                    "Your account is locked due to multiple failed login attempts.");
+                return View(model);
+            }
 
             if (result.Succeeded)
             {
-                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                    return Redirect(returnUrl);
-
                 return RedirectToAction("Index", "Home");
             }
 
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return View(model);
         }
+
 
         // LOGOUT
 

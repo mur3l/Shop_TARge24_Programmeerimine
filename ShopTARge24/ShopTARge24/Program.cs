@@ -28,6 +28,10 @@ builder.Services.AddScoped<IKindergartenServices, KindergartenServices>();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 3;
+
+    options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+    options.Lockout.MaxFailedAccessAttempts = 3;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
 })
     .AddEntityFrameworkStores<ShopTARge24Context>()
     .AddDefaultTokenProviders()
