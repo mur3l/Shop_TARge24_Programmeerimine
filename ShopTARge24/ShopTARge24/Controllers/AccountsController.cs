@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using ShopTARge24.Core.Domain;
 using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
@@ -222,6 +224,99 @@ namespace ShopTARge24.Controllers
             return View(model);
         }
 
+        // FORGOT
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View(new ForgotPasswordViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+                return RedirectToAction("ForgotPasswordConfirmation");
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var tokenEncoded = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            var link = Url.Action(
+                "ForgotPasswordNewPassword",
+                "Accounts",
+                new { email = user.Email, token = tokenEncoded },
+                Request.Scheme);
+
+            var emailDto = new EmailTokenDto
+            {
+                To = user.Email,
+                Subject = "Forgot password",
+                Body = $"To set a new password please <a href=\"{link}\">click here</a>.",
+                Token = token
+            };
+
+            _emailServices.SendEmailToken(emailDto, token);
+
+            return RedirectToAction("ForgotPasswordConfirmation");
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        // NEW PASSWORD
+        [HttpGet]
+        public IActionResult ForgotPasswordNewPassword(string email, string token)
+        {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(token))
+                return BadRequest("Invalid link.");
+
+            return View(new ForgotPasswordNewPasswordViewModel
+            {
+                Email = email,
+                Token = token
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPasswordNewPassword(ForgotPasswordNewPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+                return RedirectToAction("ForgotPasswordNewPasswordConfirmation");
+
+            var tokenDecoded = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
+
+            var result = await _userManager.ResetPasswordAsync(user, tokenDecoded, model.Password);
+
+            if (result.Succeeded)
+                return RedirectToAction("ForgotPasswordNewPasswordConfirmation");
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPasswordNewPasswordConfirmation()
+        {
+            return View();
+        }
 
         // LOGOUT
 
