@@ -38,11 +38,19 @@
             <h2>External Login</h2>
             <hr />
 
-            <form asp-action="ExternalLogin" method="post">
-                
+            <form asp-controller="Accounts"
+                  asp-action="ExternalLogin"
+                  asp-route-returnUrl="@Context.Request.Query["ReturnUrl"]"
+                  method="post">
+                @Html.AntiForgeryToken()
+
+                <button type="submit" class="btn btn-primary" name="provider" value="Google">
+                    Log in with Google
+                </button>
             </form>
         </section>
     </div>
+
 </div>
 
 

@@ -10,6 +10,8 @@ using ShopTARge24.Core.Dto;
 using ShopTARge24.Core.ServiceInterface;
 using ShopTARge24.Models;
 using ShopTARge24.Models.Accounts;
+using System.Security.Claims;
+
 
 namespace ShopTARge24.Controllers
 {
@@ -224,6 +226,87 @@ namespace ShopTARge24.Controllers
             return View(model);
         }
 
+        //GOOGLE
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult ExternalLogin(string provider, string? returnUrl)
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Accounts", new { returnUrl = returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+            return Challenge(properties, provider);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string? returnUrl, string? remoteError)
+        {
+            returnUrl ??= Url.Content("~/");
+
+            if (!string.IsNullOrWhiteSpace(remoteError))
+            {
+                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
+                return View("Login");
+            }
+
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+                return RedirectToAction("Login");
+
+            var result = await _signInManager.ExternalLoginSignInAsync(
+                info.LoginProvider,
+                info.ProviderKey,
+                isPersistent: false,
+                bypassTwoFactor: true);
+
+            if (result.Succeeded)
+                return LocalRedirect(returnUrl);
+
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                ModelState.AddModelError(string.Empty, "Email not received from Google.");
+                return View("Login");
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                user = new ApplicationUser
+                {
+                    UserName = email,
+                    Email = email,
+                    Name = info.Principal.FindFirstValue(ClaimTypes.Name) ?? email,
+                    City = "Unknown",
+                    EmailConfirmed = true
+                };
+
+                var createResult = await _userManager.CreateAsync(user);
+                if (!createResult.Succeeded)
+                {
+                    foreach (var error in createResult.Errors)
+                        ModelState.AddModelError(string.Empty, error.Description);
+
+                    return View("Login");
+                }
+            }
+
+            var addLoginResult = await _userManager.AddLoginAsync(user, info);
+            if (!addLoginResult.Succeeded)
+            {
+                foreach (var error in addLoginResult.Errors)
+                    ModelState.AddModelError(string.Empty, error.Description);
+
+                return View("Login");
+            }
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            return LocalRedirect(returnUrl);
+        }
+
+
         // FORGOT
 
         [HttpGet]
@@ -328,5 +411,8 @@ namespace ShopTARge24.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        // GOOGLE
+
     }
 }
