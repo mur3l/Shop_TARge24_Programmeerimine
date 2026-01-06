@@ -1,0 +1,3 @@
+# Local development secrets
+appsettings.Development.json
+secrets.json
