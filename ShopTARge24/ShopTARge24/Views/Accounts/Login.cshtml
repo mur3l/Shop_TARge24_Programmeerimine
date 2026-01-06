@@ -48,6 +48,17 @@
                     Log in with Google
                 </button>
             </form>
+
+            <form asp-controller="Accounts"
+                  asp-action="ExternalLogin"
+                  asp-route-returnUrl="@Context.Request.Query["ReturnUrl"]"
+                  method="post">
+                @Html.AntiForgeryToken()
+
+                <button type="submit" class="btn btn-primary" name="provider" value="Microsoft">
+                    Log in with Microsoft
+                </button>
+            </form>
         </section>
     </div>
 

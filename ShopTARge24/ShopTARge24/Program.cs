@@ -39,15 +39,22 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     .AddDefaultTokenProviders()
     .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("CustomEmailConfirmation");
 
-// GOOGLE AUTH
+
+// GOOGLE JA MICROSOFT AUTH
 builder.Services.AddAuthentication()
     .AddGoogle(googleOptions =>
     {
         googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]
             ?? throw new InvalidOperationException("Google ClientId not found.");
-
         googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]
             ?? throw new InvalidOperationException("Google ClientSecret not found.");
+    })
+    .AddMicrosoftAccount(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"]
+            ?? throw new InvalidOperationException("Microsoft ClientId not found.");
+        options.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"]
+            ?? throw new InvalidOperationException("Microsoft ClientSecret not found.");
     });
 
 
