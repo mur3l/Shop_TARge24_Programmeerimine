@@ -39,29 +39,13 @@
                     <td>@realestate.ModifiedAt</td>
                     <td>
                         <div class="action-buttons">
-                            <a asp-action="Details"
-                               asp-controller="RealEstates"
-                               asp-route-id="@realestate.Id"
-                               class="btn btn-outline-primary">
-                                Details
-                            </a>
-
-                            <a asp-action="Update"
-                               asp-controller="RealEstates"
-                               asp-route-id="@realestate.Id"
-                               class="btn btn-outline-primary">
-                                Update
-                            </a>
-
-                            <a asp-action="Delete"
-                               asp-controller="RealEstates"
-                               asp-route-id="@realestate.Id"
-                               class="btn btn-outline-danger">
-                                Delete
-                            </a>
+                            <div class="action-buttons">
+                                <a asp-action="Details" asp-route-id="@realestate.Id" class="btn btn-outline-primary">Details</a>
+                                <a asp-action="Update" asp-route-id="@realestate.Id" class="btn btn-outline-primary">Update</a>
+                                <a asp-action="Delete" asp-route-id="@realestate.Id" class="btn btn-outline-danger">Delete</a>
+                            </div>
                         </div>
                     </td>
-
                 </tr>
                 rowNumber += 1;
             }

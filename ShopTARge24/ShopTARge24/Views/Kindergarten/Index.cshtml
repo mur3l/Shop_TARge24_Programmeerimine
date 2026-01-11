@@ -36,26 +36,11 @@
                     <td>@kindergarten.TeacherName</td>
                     <td>
                         <div class="action-buttons">
-                            <a asp-action="Details"
-                               asp-route-id="@kindergarten.Id"
-                               class="btn btn-outline-primary">
-                                Details
-                            </a>
-
-                            <a asp-action="Update"
-                               asp-route-id="@kindergarten.Id"
-                               class="btn btn-outline-primary">
-                                Update
-                            </a>
-
-                            <a asp-action="Delete"
-                               asp-route-id="@kindergarten.Id"
-                               class="btn btn-outline-danger">
-                                Delete
-                            </a>
+                            <a asp-action="Details" asp-route-id="@kindergarten.Id" class="btn btn-outline-primary">Details</a>
+                            <a asp-action="Update" asp-route-id="@kindergarten.Id" class="btn btn-outline-primary">Update</a>
+                            <a asp-action="Delete" asp-route-id="@kindergarten.Id" class="btn btn-outline-danger">Delete</a>
                         </div>
                     </td>
-
                 </tr>
                 rowNumber += 1; 
             }
