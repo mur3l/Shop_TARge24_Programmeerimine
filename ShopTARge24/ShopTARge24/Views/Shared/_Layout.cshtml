@@ -23,59 +23,29 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ShopTARge24</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+                <button class="navbar-toggler" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNav"
+                        aria-controls="mainNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <!-- VASAK -->
-                    <ul class="navbar-nav me-auto">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Privacy" asp-action="Privacy">Privacy</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Email" asp-action="Index">E-mail</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ChatCounter">Chat</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Spaceships" asp-action="Index" id="spaceships">Spaceship</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="RealEstates" asp-action="Index">RealEstate</a>
-                            </li>
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Kindergarten" asp-action="Index" id="kindergarten">Kindergarten</a>
-                            </li>
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AccuWeathers" asp-action="Index">AccuWeather</a>
-                            </li>
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="ChuckNorris" asp-action="Index">ChuckNorris</a>
-                            </li>
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="CockTails" asp-action="Index">CockTails</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                        }
 
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" id="mainNav">
+
+                    <!-- Home & Privacy -->
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
                     </ul>
 
-                    <!-- PAREM -->
+                    <!-- Login / Account -->
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark"
@@ -84,17 +54,14 @@
                                role="button"
                                data-bs-toggle="dropdown"
                                aria-expanded="false">
-                                @(SignInManager.IsSignedIn(User) ? "Manage Account" : "Log in")
+                                Account
                             </a>
 
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-
                                 @if (SignInManager.IsSignedIn(User))
                                 {
                                     <li>
-                                        <span class="dropdown-item-text">
-                                            Hello, @User.Identity?.Name
-                                        </span>
+                                        <span class="dropdown-item-text">Hello, @User.Identity?.Name</span>
                                     </li>
 
                                     <li><hr class="dropdown-divider" /></li>
@@ -110,27 +77,15 @@
                                     <li><hr class="dropdown-divider" /></li>
 
                                     <li>
-                                        <form asp-controller="Accounts"
-                                              asp-action="Logout"
-                                              method="post" class="m-0">
-                                            <button type="submit" class="dropdown-item logout-glow">
-                                                Logout
-                                            </button>
+                                        <form asp-controller="Accounts" asp-action="Logout" method="post" class="m-0">
+                                            <button type="submit" class="dropdown-item logout-glow">Logout</button>
                                         </form>
                                     </li>
                                 }
                                 else
                                 {
                                     <li>
-                                        <a class="dropdown-item"
-                                           asp-controller="Accounts"
-                                           asp-action="Login">
-                                            Log in
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a class="dropdown-item"
+                                        <a class="dropdown-item fw-semibold"
                                            asp-controller="Accounts"
                                            asp-action="Register">
                                             Register
@@ -139,7 +94,6 @@
 
                                     <li><hr class="dropdown-divider" /></li>
 
-                                    <!-- External -->
                                     <li>
                                         <a class="dropdown-item"
                                            asp-controller="Accounts"
@@ -166,6 +120,7 @@
                                         </a>
                                     </li>
                                 }
+
                             </ul>
                         </li>
                     </ul>
@@ -173,6 +128,7 @@
                 </div>
             </div>
         </nav>
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">
