@@ -338,6 +338,44 @@ textarea.form-control {
             box-shadow: 0 0 0 0.15rem rgba(255, 215, 0, 0.25) !important;
         }
 
+/* COCKTAILS SEARCH */
+.input-group .form-control {
+    background-color: var(--surface-2) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+}
+
+    .input-group .form-control::placeholder {
+        color: rgba(255,255,255,0.45) !important;
+    }
+
+    .input-group .form-control:focus {
+        border-color: rgba(255, 215, 0, 0.45) !important;
+        box-shadow: 0 0 0 0.15rem rgba(255, 215, 0, 0.18) !important;
+    }
+
+.input-group .btn {
+    border: 1px solid var(--border) !important;
+}
+
+/* WEATHER SEARCH */
+.form-control {
+    background-color: var(--surface-2) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+}
+
+    .form-control::placeholder {
+        color: rgba(255,255,255,0.45) !important;
+    }
+
+    .form-control:focus {
+        background-color: var(--surface-2) !important;
+        color: var(--text) !important;
+        border-color: var(--gold) !important;
+        box-shadow: 0 0 0 0.15rem rgba(255, 215, 0, 0.25) !important;
+    }
+
 /* TABLE STYLES */
 .table {
     color: var(--text);
