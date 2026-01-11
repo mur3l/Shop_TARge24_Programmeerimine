@@ -249,3 +249,50 @@ body {
         color: var(--gold) !important;
         box-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
     }
+
+/* TABLE STYLES */
+.table {
+    color: var(--text);
+    background-color: var(--surface-2);
+    border-color: var(--border);
+}
+
+    .table thead th {
+        background-color: var(--surface);
+        color: var(--gold);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .table tbody tr {
+        background-color: var(--surface-2);
+    }
+
+        .table tbody tr:hover {
+            background-color: rgba(255, 215, 0, 0.06);
+        }
+
+    .table td,
+    .table th {
+        border-color: var(--border);
+        vertical-align: middle;
+    }
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.table-responsive {
+    background: transparent;
+}
+
+.table tbody td {
+    background-color: var(--surface-2) !important;
+    color: var(--text);
+}
+
+/* ACTION BUTTON ALIGNEMENT */
+.table .action-buttons {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: nowrap;
+}
