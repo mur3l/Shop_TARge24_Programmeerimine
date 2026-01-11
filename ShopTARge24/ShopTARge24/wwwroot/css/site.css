@@ -1,3 +1,127 @@
+:root {
+    --bg: #0b0f14;
+    --surface: #101826;
+    --surface-2: #0f172a;
+    --border: rgba(255,255,255,0.08);
+    --text: rgba(255,255,255,0.88);
+    --muted: rgba(255,255,255,0.65);
+    --gold: #FFD700;
+    --gold-soft: rgba(255, 215, 0, 0.65);
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+/* GLOBAL */
+html, body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+a {
+    color: var(--gold);
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #ffe066;
+        text-decoration: underline;
+    }
+
+.container, .container-fluid {
+    color: var(--text);
+}
+
+/* NAVBAR */
+.navbar {
+    background: rgba(16, 24, 38, 0.92) !important;
+    border-bottom: 1px solid var(--border) !important;
+    backdrop-filter: blur(8px);
+}
+
+    .navbar .navbar-brand,
+    .navbar .nav-link {
+        color: var(--text) !important;
+    }
+
+        .navbar .nav-link:hover {
+            color: var(--gold) !important;
+        }
+
+        .navbar .nav-link.active {
+            color: var(--gold) !important;
+        }
+
+/* DROPDOWN */
+.dropdown-menu {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+}
+
+.dropdown-item {
+    color: var(--text);
+}
+
+    .dropdown-item:hover,
+    .dropdown-item:focus {
+        background: rgba(255, 215, 0, 0.10);
+        color: var(--gold);
+    }
+
+.dropdown-divider {
+    border-top: 1px solid var(--border);
+}
+
+.dropdown-item-text {
+    color: var(--muted);
+}
+
+/* BUTTONS*/
+.btn-primary {
+    background-color: var(--gold) !important;
+    border-color: var(--gold) !important;
+    color: #0b0f14 !important;
+    font-weight: 600;
+}
+
+/* TILES */
+.card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+.card-title {
+    color: var(--text);
+}
+
+.card-text {
+    color: var(--muted);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.15s ease;
+}
+
+.hero .btn.btn-light {
+    background: var(--surface-2) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--muted) !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+}
+
+    .hero .btn.btn-light:hover,
+    .hero .btn.btn-light:focus {
+        background: rgba(255, 215, 0, 0.10) !important;
+        border-color: rgba(255, 215, 0, 0.35) !important;
+        color: var(--gold) !important;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
+    }
+
 html {
   font-size: 14px;
 }
@@ -30,6 +154,15 @@ body {
   text-align: start;
 }
 
+.register-glow {
+    font-weight: 400;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+    .register-glow:hover {
+        text-shadow: 0 0 10px rgba(13, 110, 253, 0.6);
+    }
+
 .logout-glow {
     transition: color 0.2s ease, text-shadow 0.2s ease;
 }
@@ -38,7 +171,6 @@ body {
         text-shadow: 0 0 10px rgba(220, 53, 69, 0.8);
 }
 
-
 @media (min-width: 992px) {
     .navbar .dropdown:hover .dropdown-menu {
         display: block;
@@ -46,14 +178,38 @@ body {
     }
 }
 
-
-.dropdown-menu {
-    border-radius: 12px;
+/* TILES */
+.popover {
+    border: 1px solid var(--border) !important;
+    border-radius: 14px !important;
+    box-shadow: var(--shadow) !important;
 }
 
+    .popover .popover-header {
+        background: rgba(255, 215, 0, 0.10) !important;
+        color: var(--gold) !important;
+        border-bottom: 1px solid var(--border) !important;
+        font-weight: 600;
+    }
 
-.hero {
-    min-height: 55vh;
-    background: linear-gradient(135deg, #1d3557, #457b9d);
-    border-radius: 18px;
+    .popover .popover-body {
+        background: var(--surface-2) !important;
+        color: var(--muted) !important;
+    }
+
+.bs-popover-auto > .popover-arrow::before,
+.bs-popover-bottom > .popover-arrow::before,
+.bs-popover-top > .popover-arrow::before,
+.bs-popover-start > .popover-arrow::before,
+.bs-popover-end > .popover-arrow::before,
+.bs-popover-auto > .popover-arrow::after,
+.bs-popover-bottom > .popover-arrow::after,
+.bs-popover-top > .popover-arrow::after,
+.bs-popover-start > .popover-arrow::after,
+.bs-popover-end > .popover-arrow::after {
+    border-bottom-color: var(--surface-2) !important;
+    border-top-color: var(--surface-2) !important;
+    border-left-color: var(--surface-2) !important;
+    border-right-color: var(--surface-2) !important;
 }
+
