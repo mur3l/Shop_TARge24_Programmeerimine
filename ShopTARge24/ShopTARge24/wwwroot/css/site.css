@@ -292,6 +292,51 @@ textarea.form-control {
     color: var(--gold) !important;
 }
 
+/* EMAIL INPUT */
+.form-control,
+.form-control:focus {
+    background-color: var(--surface-2) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: none !important;
+}
+
+    .form-control::placeholder {
+        color: rgba(255,255,255,0.45) !important;
+    }
+
+    .form-control:focus {
+        border-color: var(--gold) !important;
+        box-shadow: 0 0 0 0.15rem rgba(255, 215, 0, 0.25) !important;
+    }
+
+    .form-control[type="file"] {
+        background-color: var(--surface-2) !important;
+        color: var(--muted) !important;
+        border: 1px solid var(--border) !important;
+    }
+
+        .form-control[type="file"]::file-selector-button {
+            background: var(--surface) !important;
+            color: var(--text) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 10px;
+            margin-right: 0.75rem;
+            padding: 0.45rem 0.9rem;
+            cursor: pointer;
+        }
+
+            .form-control[type="file"]::file-selector-button:hover {
+                background: rgba(255, 215, 0, 0.10) !important;
+                color: var(--gold) !important;
+                border-color: rgba(255, 215, 0, 0.35) !important;
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.25);
+            }
+
+        .form-control[type="file"]:focus {
+            border-color: var(--gold) !important;
+            box-shadow: 0 0 0 0.15rem rgba(255, 215, 0, 0.25) !important;
+        }
 
 /* TABLE STYLES */
 .table {
