@@ -29,7 +29,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <!-- VASAK -->
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav me-auto">
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
@@ -69,7 +69,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Privacy" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                             </li>
                         }
 
@@ -84,17 +84,20 @@
                                role="button"
                                data-bs-toggle="dropdown"
                                aria-expanded="false">
-                                Manage Account
+                                @(SignInManager.IsSignedIn(User) ? "Manage Account" : "Log in")
                             </a>
 
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-                                @if (User.Identity?.IsAuthenticated == true)
+
+                                @if (SignInManager.IsSignedIn(User))
                                 {
                                     <li>
                                         <span class="dropdown-item-text">
-                                            Hello, @User.Identity.Name
+                                            Hello, @User.Identity?.Name
                                         </span>
                                     </li>
+
+                                    <li><hr class="dropdown-divider" /></li>
 
                                     <li>
                                         <a class="dropdown-item"
@@ -104,15 +107,13 @@
                                         </a>
                                     </li>
 
-                                    <li>
-                                        <hr class="dropdown-divider" />
-                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
 
                                     <li>
                                         <form asp-controller="Accounts"
                                               asp-action="Logout"
-                                              method="post">
-                                            <button type="submit" class="dropdown-item">
+                                              method="post" class="m-0">
+                                            <button type="submit" class="dropdown-item logout-glow">
                                                 Logout
                                             </button>
                                         </form>
@@ -124,7 +125,7 @@
                                         <a class="dropdown-item"
                                            asp-controller="Accounts"
                                            asp-action="Login">
-                                            Login
+                                            Log in
                                         </a>
                                     </li>
 
@@ -136,6 +137,27 @@
                                         </a>
                                     </li>
 
+                                    <li><hr class="dropdown-divider" /></li>
+
+                                    <!-- External -->
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Accounts"
+                                           asp-action="Login">
+                                            Use Google
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Accounts"
+                                           asp-action="Login">
+                                            Use Microsoft
+                                        </a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider" /></li>
+
                                     <li>
                                         <a class="dropdown-item"
                                            asp-controller="Accounts"
@@ -143,7 +165,6 @@
                                             Reset password
                                         </a>
                                     </li>
-
                                 }
                             </ul>
                         </li>

@@ -38,3 +38,22 @@ body {
         text-shadow: 0 0 10px rgba(220, 53, 69, 0.8);
 }
 
+
+@media (min-width: 992px) {
+    .navbar .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+    }
+}
+
+
+.dropdown-menu {
+    border-radius: 12px;
+}
+
+
+.hero {
+    min-height: 55vh;
+    background: linear-gradient(135deg, #1d3557, #457b9d);
+    border-radius: 18px;
+}

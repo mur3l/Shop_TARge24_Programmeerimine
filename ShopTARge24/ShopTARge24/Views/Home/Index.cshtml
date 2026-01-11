@@ -2,7 +2,97 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero text-white d-flex align-items-center p-5 mb-4">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">ShopTARge24</h1>
+        <p class="lead mb-4">
+            One place for multiple mini-apps: e-mail, chat, APIs and more.
+        </p>
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <a class="btn btn-light btn-lg" asp-controller="Email" asp-action="Index">Go to E-mail</a>
+        }
+        else
+        {
+            <a class="btn btn-light btn-lg" asp-controller="Accounts" asp-action="Login">Log in to continue</a>
+        }
+    </div>
 </div>
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <div class="container">
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">E-mail</h5>
+                        <p class="card-text">Open your e-mail module.</p>
+                        <a class="btn btn-outline-primary" asp-controller="Email" asp-action="Index">Open</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Chat</h5>
+                        <p class="card-text">Try the chat feature.</p>
+                        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="ChatCounter">Open</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">AccuWeather</h5>
+                        <p class="card-text">Weather data and forecasts.</p>
+                        <a class="btn btn-outline-primary" asp-controller="AccuWeathers" asp-action="Index">Open</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Spaceship</h5>
+                        <p class="card-text">Spaceship module.</p>
+                        <a class="btn btn-outline-primary" asp-controller="Spaceships" asp-action="Index">Open</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">ChuckNorris</h5>
+                        <p class="card-text">Chuck Norris jokes API.</p>
+                        <a class="btn btn-outline-primary" asp-controller="ChuckNorris" asp-action="Index">Open</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Cocktails</h5>
+                        <p class="card-text">Cocktail recipes API.</p>
+                        <a class="btn btn-outline-primary" asp-controller="CockTails" asp-action="Index">Open</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="alert alert-info">
+            Log in to see the full menu (E-mail, Chat, Spaceship, RealEstate, Kindergarten, AccuWeather, ChuckNorris, Cocktails).
+        </div>
+    </div>
+}
