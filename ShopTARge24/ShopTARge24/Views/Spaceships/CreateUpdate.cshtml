@@ -65,15 +65,31 @@ else
                <partial name="_Images" model="images" />
         }
 
-        @if (Model.Id.HasValue)
-        {
-            <input asp-action="update" asp-controller="spaceships" type="submit" class="btn btn-success" value="Update" />
-        }
-        else
-        {
-            <input asp-action="create" asp-controller="spaceships" type="submit" class="btn btn-success" value="Create" />
-        }
+        <div class="action-buttons mt-3">
+            @if (Model.Id.HasValue)
+            {
+                <input asp-action="update"
+                       asp-controller="spaceships"
+                       type="submit"
+                       class="btn btn-outline-primary"
+                       value="Update" />
+            }
+            else
+            {
+                <input asp-action="create"
+                       asp-controller="spaceships"
+                       type="submit"
+                       class="btn btn-outline-primary"
+                       value="Create" />
+            }
 
-        <a asp-action="Index" asp-controller="spaceships" class="btn btn-success">Back</a>
+            <a asp-action="Index"
+               asp-controller="spaceships"
+               class="btn btn-outline-danger">
+                Back
+            </a>
+        </div>
+
+
     </form>
 </div>

@@ -66,10 +66,20 @@ else
             </div>
         </div>
 
-        <button type="submit" class="btn btn-success" id="kinder-submit">
-            @(Model.Id.HasValue ? "Update" : "Create")
-        </button>
-        <a asp-action="Index" asp-controller="Kindergarten" class="btn btn-secondary" id="kinder-back">Back</a>
+        <div class="action-buttons mt-3">
+            <button type="submit"
+                    class="btn btn-outline-primary"
+                    id="kinder-submit">
+                @(Model.Id.HasValue ? "Update" : "Create")
+            </button>
+
+            <a asp-action="Index"
+               asp-controller="Kindergarten"
+               class="btn btn-outline-danger">
+                Back
+            </a>
+        </div>
+
     </form>
 
     @if (Model.Id.HasValue && Model.Images != null && Model.Images.Any())
