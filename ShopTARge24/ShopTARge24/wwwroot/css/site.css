@@ -250,6 +250,49 @@ body {
         box-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
     }
 
+/* CHAT BUTTONS */
+.form-control,
+.form-control:focus {
+    background-color: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: none;
+}
+
+    .form-control::placeholder {
+        color: var(--muted);
+    }
+
+    .form-control:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 0.15rem rgba(255, 215, 0, 0.25);
+    }
+
+textarea.form-control {
+    resize: vertical;
+}
+
+.input-group-text {
+    background-color: var(--surface) !important;
+    color: var(--muted) !important;
+    border: 1px solid var(--border) !important;
+}
+
+.input-group .form-control {
+    border: 1px solid var(--border) !important;
+}
+
+    .input-group .form-control:focus {
+        border-color: var(--gold) !important;
+        box-shadow: 0 0 0 0.15rem rgba(255, 215, 0, 0.25) !important;
+    }
+
+.input-group:focus-within .input-group-text {
+    border-color: rgba(255, 215, 0, 0.45) !important;
+    color: var(--gold) !important;
+}
+
+
 /* TABLE STYLES */
 .table {
     color: var(--text);
