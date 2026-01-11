@@ -213,3 +213,20 @@ body {
     border-right-color: var(--surface-2) !important;
 }
 
+/* TILE "OPEN" */
+.card .btn-outline-primary {
+    background: var(--surface-2) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--muted) !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .card .btn-outline-primary:hover,
+    .card .btn-outline-primary:focus {
+        background: rgba(255, 215, 0, 0.08) !important;
+        border-color: rgba(255, 215, 0, 0.45) !important;
+        color: var(--gold) !important;
+        box-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+    }
