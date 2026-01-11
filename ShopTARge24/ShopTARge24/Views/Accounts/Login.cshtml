@@ -28,7 +28,9 @@
                     <label asp-for="RememberMe" class="form-check-label"></label>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-outline-primary">
+                    Login
+                </button>
             </form>
         </section>
     </div>
@@ -45,7 +47,10 @@
                   class="mb-2">
                 @Html.AntiForgeryToken()
 
-                <button type="submit" class="btn btn-primary" name="provider" value="Google">
+                <button type="submit"
+                        class="btn btn-outline-primary w-100"
+                        name="provider"
+                        value="Google">
                     Log in with Google
                 </button>
             </form>
@@ -56,7 +61,10 @@
                   method="post">
                 @Html.AntiForgeryToken()
 
-                <button type="submit" class="btn btn-primary" name="provider" value="Microsoft">
+                <button type="submit"
+                        class="btn btn-outline-primary w-100"
+                        name="provider"
+                        value="Microsoft">
                     Log in with Microsoft
                 </button>
             </form>
