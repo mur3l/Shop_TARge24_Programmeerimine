@@ -186,7 +186,7 @@ body {
 }
 
     .popover .popover-header {
-        background: rgba(255, 215, 0, 0.10) !important;
+        background: var(--surface-2) !important;
         color: var(--gold) !important;
         border-bottom: 1px solid var(--border) !important;
         font-weight: 600;
